@@ -9,8 +9,8 @@ const MealsSummary = () => {
         confort of your home.
       </p>
       <p>
-        All our foods are cooked with the highest quality ingredients,
-        just-in-time by our famous Chef DadoMagal
+        All our plates are cooked with the highest quality ingredients,
+        just-in-time by our famous Chef <i>DadoMagal aka. "Le Chat"</i>
       </p>
     </section>
   );
