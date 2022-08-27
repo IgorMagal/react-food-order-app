@@ -10,8 +10,12 @@ const Cart = (props) => {
   const cartTotal = `$ ${cartContext.cartTotal.toFixed(2)}`;
   const cartHasItems = cartContext.items.length > 0;
 
-  const cartItemRemoveHandler = (id) => {};
-  const cartItemAddHandler = (item) => {};
+  const cartItemRemoveHandler = (id) => {
+    cartContext.removeItem(id);
+  };
+  const cartItemAddHandler = (item) => {
+    cartContext.addItem({ ...item, qty: 1 });
+  };
 
   const cartItems = (
     <ul className={styles["cart-items"]}>
@@ -31,6 +35,9 @@ const Cart = (props) => {
   return (
     <Modal onCloseCart={props.onCloseCart}>
       {cartItems}
+      {!cartHasItems && (
+        <p>Your cart is empty, go ahead and add some food to it!</p>
+      )}
       <div className={styles.total}>
         <span>Total Amount</span>
         <span>{cartTotal}</span>
