@@ -1,36 +1,66 @@
 import styles from "./AvailableMeals.module.css";
 import MealItem from "./MealItem/MealItem";
 import Card from "../UI/Card/Card";
-
-const DUMMY_MEALS = [
-  {
-    id: "m1",
-    name: "Natural Chicken Sauce",
-    description: "Chicken water from an opened package perfectly unfrozen.",
-    price: 22.99,
-  },
-  {
-    id: "m2",
-    name: "Treats",
-    description: "Any kind really, just have to be crunchy!",
-    price: 16.5,
-  },
-  {
-    id: "m3",
-    name: "Barbecue Burger",
-    description: "American, raw, meaty (That's for my dad.)",
-    price: 12.99,
-  },
-  {
-    id: "m4",
-    name: "Oreos",
-    description: "I only like the crust though, you can have the filling.",
-    price: 18.99,
-  },
-];
+import { useEffect, useState } from "react";
 
 const AvailableMeals = () => {
-  const mealsList = DUMMY_MEALS.map((meal) => (
+  const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState(null);
+
+  useEffect(() => {
+    const fetchMeals = async () => {
+      const response = await fetch(
+        "https://react-http-reqs-f9475-default-rtdb.firebaseio.com/meals.json"
+      );
+
+      if (!response.ok) {
+        throw new Error("Something went wrong.");
+      }
+
+      const data = await response.json();
+
+      const loadedMeals = [];
+      for (const key in data) {
+        loadedMeals.push({
+          id: key,
+          key: key,
+          name: data[key].name,
+          description: data[key].description,
+          price: data[key].price,
+          stock: data[key].stock,
+        });
+      }
+
+      setMeals(loadedMeals);
+      setIsLoading(false);
+    };
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <section>
+        <h3 className={styles.mealsLoading}>Loading something yummy...</h3>
+      </section>
+    );
+  }
+
+  if (httpError) {
+    return (
+      <section>
+        <h3 className={styles.mealsError}>
+          Something went wrong, we were unable to fetch any products, please try
+          again later. :(
+        </h3>
+      </section>
+    );
+  }
+
+  const mealsList = meals.map((meal) => (
     <MealItem
       id={meal.id}
       key={meal.id}

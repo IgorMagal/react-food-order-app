@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import CartIcon from "../../../assets/CartIcon/CartIcon";
-import styles from "./HeaderCartButton.module.css";
+
 import CartContext from "../../../store/CartContext";
 
 const HeaderCartButton = (props) => {
@@ -12,7 +12,11 @@ const HeaderCartButton = (props) => {
     return counter + item.qty;
   }, 0);
 
-  const btnStyles = `${styles.button} ${btnHighlighted ? styles.bump : ""}`;
+  const btnStyles = `${
+    btnHighlighted
+      ? "hover:border-white animate-wiggle cursor-pointer text-inherit justify-around font-bold border-solid border-4 items-center border-white bg-gray-800 text-white flex rounded-full py-2 p[1rem] min-w-[4.5rem] min-h-[3rem]"
+      : "hover:border-white cursor-pointer text-inherit justify-around font-bold border-solid border-4 items-center border-gray-800 bg-gray-800 text-white flex rounded-full py-2 p[1rem] min-w-[4.5rem] min-h-[3rem]"
+  }`;
   useEffect(() => {
     if (items.length === 0) {
       return;
@@ -20,7 +24,7 @@ const HeaderCartButton = (props) => {
     setBtnHighlighted(true);
     const btnTimer = setTimeout(() => {
       setBtnHighlighted(false);
-    }, 300);
+    }, 500);
     return () => {
       clearTimeout(btnTimer);
     };
@@ -28,10 +32,10 @@ const HeaderCartButton = (props) => {
 
   return (
     <button className={btnStyles} onClick={props.onClick}>
-      <span className={styles.icon}>
+      <span className="">
         <CartIcon />
       </span>
-      <span className={styles.badge}>{cartItemsQty}</span>
+      <span className="text-2xl pr-2">{cartItemsQty}</span>
     </button>
   );
 };
